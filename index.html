@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modal</title>
     <link rel="stylesheet" href="./style.css">
     <style>
@@ -11,6 +12,66 @@
         html, body {
             height: 100%;
             width: 100%;
+        }
+        .announcement {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #000;
+            width: 100%;
+            height: 34px;
+            background: #f4f4f4;
+            overflow: hidden;
+        }
+        .announcement::before {
+            content: "!";
+            display: block;
+            background: yellow;
+            margin-right: 1em;
+        }
+        .announcement::after {
+            content: "+";
+            display: block;
+            background: yellow;
+            margin-left: auto;
+        }
+        .announcement__heading {
+            font-weight: bold;
+        }
+        .announcement__list {
+            list-style: none;
+            padding: 0;
+        }
+        .announcement__list-item {
+            display: none;
+            overflow: hidden;
+        }
+        .announcement__list-item:first-child {
+            display: flex;
+        }
+        .announcement__date {
+            flex: none;
+            display: block;
+            margin-left: 1em;
+        }
+        .announcement__title {
+            flex: none;
+            display: block;
+            margin-left: 1em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        @media screen and ( max-width: 767px ) {
+            .announcement__heading {
+                display: none;
+            }
+            .announcement__date {
+                display: none;
+            }
+            .announcement__title {
+                margin-left: 0;
+            }
         }
         .js-locked {
             box-sizing: border-box;
@@ -78,6 +139,7 @@
     <script>
         (function(){
             window.addEventListener( 'load' , function() {
+                announcementMaxWidth();
                 var modal = document.querySelectorAll( '.js-modal' );
                 if ( 0 < modal.length ) {
                     var winScrollTop = null,
@@ -117,12 +179,41 @@
                     }
                 }
             });
+            window.addEventListener( 'resize' , announcementMaxWidth , false );
         }());
+        function announcementMaxWidth() {
+            var announcement = document.querySelector( '.announcement' ),
+                announcementWidth = announcement.offsetWidth;
+                announcementTitle = document.querySelectorAll( '.announcement__title' );
+            for ( var i = 0; i < announcementTitle.length; i++ ) {
+                if ( window.innerWidth <= 767 ) {
+                    announcementTitle[i].style.maxWidth = announcementWidth * 0.85 + 'px';
+                } else {
+                    announcementTitle[i].style.maxWidth = announcementWidth * 0.68 + 'px';
+                }
+            }
+        }
     </script>
 </head>
 <body>
+    <a href="javascript:void(0)" data-modal="modal-001" class="announcement js-modal-open">
+        <span class="announcement__heading">HEADING</span>
+        <ul class="announcement__list">
+            <li class="announcement__list-item">
+                <span class="announcement__date">2020-03-03</span>
+                <span class="announcement__title">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</span>
+            </li>
+            <li class="announcement__list-item">
+                <span class="announcement__date">2020-03-02</span>
+                <span class="announcement__title">TITLE②</span>
+            </li>
+            <li class="announcement__list-item">
+                <span class="announcement__date">2020-03-01</span>
+                <span class="announcement__title">TITLE③</span>
+            </li>
+        </ul>
+    </a>
     <ul>
-        <li><a href="javascript:void(0)" data-modal="modal-001" class="js-modal-open">モーダル①が開きます</a></li>
         <li><a href="javascript:void(0)" data-modal="modal-002" class="js-modal-open">モーダル②が開きます</a></li>
     </ul>
     <div id="modal-001" class="modal js-modal">
